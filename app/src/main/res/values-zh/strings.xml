@@ -68,4 +68,19 @@
     <string name="home_permission_settings">去设置</string>
     <string name="home_loading">Tabula...</string>
     <string name="home_photos_left">还剩 %1$d 张</string>
+    <string name="settings_section_privacy">隐私设置</string>
+    <string name="settings_section_theme">主题设置</string>
+    <string name="settings_section_region">区域</string>
+    <string name="settings_privacy_title">仅本地处理</string>
+    <string name="settings_privacy_description">照片只在本机处理，不进行云端同步或上传。</string>
+    <string name="settings_version_format">版本 %1$s</string>
+    <string name="review_title">回收站</string>
+    <string name="review_count_format">共 %1$d 张</string>
+    <string name="review_selected_format">已选择 %1$d/%2$d</string>
+    <string name="review_empty">回收站为空</string>
+    <string name="session_remaining_format">还剩 %1$d 张</string>
+    <string name="action_next_set">再来一组</string>
+    <string name="session_summary_title">本次总结</string>
+    <string name="session_summary_reviewed">本次预览 %1$d 张照片</string>
+    <string name="session_summary_marked">标记 %1$d 张照片</string>
 </resources>

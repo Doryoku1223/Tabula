@@ -17,6 +17,7 @@ class PhotoRepository(private val context: Context) : PhotoDataSource {
 
     private val database = TabulaDatabase.getInstance(context)
     private val photoDao = database.photoDao()
+    private val trashPhotoDao = database.trashPhotoDao()
 
     private val _indexingProgress = MutableStateFlow(100)
     override val indexingProgress: StateFlow<Int> = _indexingProgress.asStateFlow()
@@ -48,6 +49,32 @@ class PhotoRepository(private val context: Context) : PhotoDataSource {
                 throw e
             }
         }
+    }
+
+    suspend fun getTrashPhotos(): List<Photo> {
+        return trashPhotoDao.getAll().map { it.toPhoto() }
+    }
+
+    suspend fun addToTrash(photos: List<Photo>) {
+        if (photos.isEmpty()) return
+        trashPhotoDao.insertAll(
+            photos.map { photo ->
+                TrashPhotoEntity(
+                    id = photo.id,
+                    uri = photo.uri.toString(),
+                    dateAdded = photo.dateAdded
+                )
+            }
+        )
+    }
+
+    suspend fun removeFromTrash(photos: List<Photo>) {
+        if (photos.isEmpty()) return
+        trashPhotoDao.deleteByIds(photos.map { it.id })
+    }
+
+    suspend fun clearTrash() {
+        trashPhotoDao.deleteAll()
     }
 
     override suspend fun refreshIndex() {
@@ -151,6 +178,14 @@ class PhotoRepository(private val context: Context) : PhotoDataSource {
         )
         val dateAddedSeconds = dateTaken / 1000L
         return Photo(id = id, uri = uriValue, dateAdded = dateAddedSeconds)
+    }
+
+    private fun TrashPhotoEntity.toPhoto(): Photo {
+        return Photo(
+            id = id,
+            uri = Uri.parse(uri),
+            dateAdded = dateAdded
+        )
     }
     @RequiresApi(Build.VERSION_CODES.R)
     private fun createBatchDeleteRequest(uris: List<String>): PendingIntent {

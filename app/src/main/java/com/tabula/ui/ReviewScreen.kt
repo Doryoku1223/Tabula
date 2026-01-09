@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
 import com.tabula.data.Photo
 import com.tabula.R
@@ -62,61 +63,101 @@ fun ReviewScreen(
             .fillMaxSize()
             .background(bg)
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+        Row(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
-            contentPadding = PaddingValues(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            items(trashBin, key = { it.id }) { photo ->
-                val isSelected = selectedIds.contains(photo.id)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .combinedClickable(
-                            onClick = {
-                                if (selectionMode) {
-                                    selectedIds = toggleSelected(selectedIds, photo.id)
-                                }
-                            },
-                            onLongClick = {
-                                if (!selectionMode) {
-                                    selectionMode = true
-                                    selectedIds = selectedIds + photo.id
-                                }
-                            },
-                            onDoubleClick = { zoomPhoto = photo }
-                        )
-                ) {
-                    AsyncImage(
-                        model = photo.uri,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+            Text(
+                text = stringResource(R.string.review_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = fg
+            )
+            val countText = if (selectionMode) {
+                stringResource(R.string.review_selected_format, selectedIds.size, trashBin.size)
+            } else {
+                stringResource(R.string.review_count_format, trashBin.size)
+            }
+            Text(
+                text = countText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = fg
+            )
+        }
 
-                    if (selectionMode) {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .padding(6.dp)
-                                .border(1.dp, fg, CircleShape)
-                                .background(
-                                    color = if (isSelected) fg else bg,
-                                    shape = CircleShape
-                                )
-                                .padding(4.dp)
-                        ) {
-                            if (isSelected) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = stringResource(R.string.content_desc_selected),
-                                    tint = bg
-                                )
+        if (trashBin.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.review_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = fg.copy(alpha = 0.7f)
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(trashBin, key = { it.id }) { photo ->
+                    val isSelected = selectedIds.contains(photo.id)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .combinedClickable(
+                                onClick = {
+                                    if (selectionMode) {
+                                        selectedIds = toggleSelected(selectedIds, photo.id)
+                                    }
+                                },
+                                onLongClick = {
+                                    if (!selectionMode) {
+                                        selectionMode = true
+                                        selectedIds = selectedIds + photo.id
+                                    }
+                                },
+                                onDoubleClick = { zoomPhoto = photo }
+                            )
+                    ) {
+                        AsyncImage(
+                            model = photo.uri,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+
+                        if (selectionMode) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(6.dp)
+                                    .border(1.5.dp, fg, CircleShape)
+                                    .background(
+                                        color = if (isSelected) fg else bg,
+                                        shape = CircleShape
+                                    )
+                                    .padding(4.dp)
+                            ) {
+                                if (isSelected) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = stringResource(R.string.content_desc_selected),
+                                        tint = bg
+                                    )
+                                }
                             }
                         }
                     }
@@ -162,7 +203,7 @@ fun ReviewScreen(
                     Text(text = stringResource(R.string.action_delete_format, selectedPhotos.size))
                 }
             }
-        } else {
+        } else if (trashBin.isNotEmpty()) {
             Button(
                 onClick = { showBurnConfirm = true },
                 modifier = Modifier

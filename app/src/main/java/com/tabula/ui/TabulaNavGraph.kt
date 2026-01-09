@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tabula.data.UserPreferencesRepository
-import com.tabula.viewmodel.HomeViewModel
+import com.tabula.viewmodel.TabulaViewModel
 import kotlinx.coroutines.launch
 
 private object Routes {
@@ -21,6 +21,7 @@ private object Routes {
 @Composable
 fun TabulaNavGraph(
     userPreferencesRepository: UserPreferencesRepository,
+    viewModel: TabulaViewModel,
     navController: NavHostController = rememberNavController()
 ) {
     val onboardingCompleted by userPreferencesRepository.onboardingCompletedFlow.collectAsState(
@@ -52,13 +53,12 @@ fun TabulaNavGraph(
             )
         }
         composable(Routes.Home) {
-            HomeRoute()
+            HomeRoute(viewModel)
         }
     }
 }
 
 @Composable
-private fun HomeRoute() {
-    val homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-    HomeScreen(viewModel = homeViewModel)
+private fun HomeRoute(viewModel: TabulaViewModel) {
+    TabulaScreen(viewModel = viewModel)
 }

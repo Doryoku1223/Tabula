@@ -11,6 +11,7 @@ import com.tabula.data.Photo
 import com.tabula.data.ThemeMode
 import com.tabula.data.UserPreferencesRepository
 import com.tabula.data.DeletePermissionRequired
+import com.tabula.data.PhotoRepository
 import com.tabula.domain.DeletePhotosUseCase
 import com.tabula.domain.GetSessionUseCase
 import com.tabula.domain.IndexingProgressUseCase
@@ -26,7 +27,8 @@ class TabulaViewModel(
     private val deletePhotosUseCase: DeletePhotosUseCase,
     private val refreshIndexUseCase: RefreshIndexUseCase,
     private val indexingProgressUseCase: IndexingProgressUseCase,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val photoRepository: PhotoRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TabulaState())
@@ -35,6 +37,7 @@ class TabulaViewModel(
     init {
         observeIndexing()
         observePreferences()
+        loadTrashBin()
         rescanLibrary()
     }
 
@@ -44,8 +47,10 @@ class TabulaViewModel(
                 photoStack = emptyList(),
                 currentPhoto = null,
                 nextPhoto = null,
+                previousPhoto = null,
                 currentIndex = 0,
                 totalCount = 0,
+                sessionMarkedCount = 0,
                 pendingDeleteIntent = null,
                 isSessionComplete = false
             )
@@ -61,8 +66,10 @@ class TabulaViewModel(
                 photoStack = emptyList(),
                 currentPhoto = null,
                 nextPhoto = null,
+                previousPhoto = null,
                 currentIndex = 0,
                 totalCount = 0,
+                sessionMarkedCount = 0,
                 pendingDeleteIntent = null,
                 isSessionComplete = false
             )
@@ -120,40 +127,65 @@ class TabulaViewModel(
 
     fun markForDeletion(photo: Photo) {
         _uiState.update { state ->
+            val alreadyTrashed = state.trashBin.any { it.id == photo.id }
             val updatedStack = state.photoStack.filterNot { it.id == photo.id }
             val updatedTrash = state.trashBin + photo
-            val currentIndex = currentIndexFor(state.totalCount, updatedStack.size)
+            val newIndex = when {
+                updatedStack.isEmpty() -> 0
+                state.currentIndex > updatedStack.size -> updatedStack.size
+                else -> state.currentIndex
+            }
             state.copy(
                 photoStack = updatedStack,
-                currentPhoto = updatedStack.firstOrNull(),
-                nextPhoto = updatedStack.getOrNull(1),
-                currentIndex = currentIndex,
+                previousPhoto = updatedStack.getOrNull(newIndex - 2),
+                currentPhoto = updatedStack.getOrNull(newIndex - 1),
+                nextPhoto = updatedStack.getOrNull(newIndex),
+                currentIndex = newIndex,
                 trashBin = updatedTrash,
+                sessionMarkedCount = if (alreadyTrashed) state.sessionMarkedCount else state.sessionMarkedCount + 1,
                 isSessionComplete = updatedStack.isEmpty()
             )
         }
+        viewModelScope.launch {
+            photoRepository.addToTrash(listOf(photo))
+        }
     }
 
-    fun keepPhoto(photo: Photo) {
+    fun showNext() {
         _uiState.update { state ->
-            val updatedStack = state.photoStack.filterNot { it.id == photo.id }
-            val currentIndex = currentIndexFor(state.totalCount, updatedStack.size)
+            val size = state.photoStack.size
+            if (size == 0 || state.currentIndex >= size) {
+                return@update state.copy(
+                    currentPhoto = null,
+                    nextPhoto = null,
+                    previousPhoto = null,
+                    isSessionComplete = true
+                )
+            }
+            val newIndex = (state.currentIndex + 1).coerceAtMost(size)
             state.copy(
-                photoStack = updatedStack,
-                currentPhoto = updatedStack.firstOrNull(),
-                nextPhoto = updatedStack.getOrNull(1),
-                currentIndex = currentIndex,
-                isSessionComplete = updatedStack.isEmpty()
+                previousPhoto = state.photoStack.getOrNull(newIndex - 2),
+                currentPhoto = state.photoStack.getOrNull(newIndex - 1),
+                nextPhoto = state.photoStack.getOrNull(newIndex),
+                currentIndex = newIndex,
+                isSessionComplete = false
             )
         }
     }
 
-    fun onSwipeLeft(photo: Photo) {
-        keepPhoto(photo)
-    }
-
-    fun onSwipeRight(photo: Photo) {
-        keepPhoto(photo)
+    fun showPrevious() {
+        _uiState.update { state ->
+            val size = state.photoStack.size
+            if (size == 0 || state.currentIndex <= 1) return@update state
+            val newIndex = (state.currentIndex - 1).coerceAtLeast(1)
+            state.copy(
+                previousPhoto = state.photoStack.getOrNull(newIndex - 2),
+                currentPhoto = state.photoStack.getOrNull(newIndex - 1),
+                nextPhoto = state.photoStack.getOrNull(newIndex),
+                currentIndex = newIndex,
+                isSessionComplete = false
+            )
+        }
     }
 
     fun openReview() {
@@ -167,6 +199,9 @@ class TabulaViewModel(
         _uiState.update { state ->
             val remaining = state.trashBin.filterNot { trash -> photos.any { it.id == trash.id } }
             state.copy(trashBin = remaining, isSessionComplete = true)
+        }
+        viewModelScope.launch {
+            photoRepository.removeFromTrash(photos)
         }
     }
 
@@ -223,11 +258,6 @@ class TabulaViewModel(
         }
     }
 
-    private fun currentIndexFor(totalCount: Int, remainingCount: Int): Int {
-        if (totalCount == 0) return 0
-        return if (remainingCount <= 0) totalCount else totalCount - remainingCount + 1
-    }
-
     private suspend fun loadNewSessionInternal() {
         val mode = _uiState.value.curationMode
         val photos = getSessionUseCase(
@@ -240,10 +270,12 @@ class TabulaViewModel(
             val currentIndex = if (photos.isNotEmpty()) 1 else 0
             state.copy(
                 photoStack = photos,
+                previousPhoto = null,
                 currentPhoto = photos.firstOrNull(),
                 nextPhoto = photos.getOrNull(1),
                 currentIndex = currentIndex,
                 totalCount = totalCount,
+                sessionMarkedCount = 0,
                 isSessionComplete = photos.isEmpty()
             )
         }
@@ -285,6 +317,11 @@ class TabulaViewModel(
         viewModelScope.launch {
             try {
                 deletePhotosUseCase(photos.map { it.uri.toString() })
+                if (shouldReload) {
+                    photoRepository.clearTrash()
+                } else {
+                    photoRepository.removeFromTrash(photos)
+                }
                 _uiState.update { state ->
                     val remaining = state.trashBin.filterNot { trash ->
                         photos.any { it.id == trash.id }
@@ -325,6 +362,13 @@ class TabulaViewModel(
     private var pendingDeletePhotos: List<Photo> = emptyList()
     private var pendingDeleteShouldReload: Boolean = false
     private var pendingDeleteMode: PendingDeleteMode = PendingDeleteMode.NONE
+
+    private fun loadTrashBin() {
+        viewModelScope.launch {
+            val trash = photoRepository.getTrashPhotos()
+            _uiState.update { state -> state.copy(trashBin = trash) }
+        }
+    }
 
     private enum class PendingDeleteMode {
         NONE,

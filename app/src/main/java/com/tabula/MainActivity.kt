@@ -2,6 +2,7 @@ package com.tabula
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,15 +10,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.withFrameNanos
-import androidx.compose.ui.graphics.Color
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
@@ -32,12 +28,15 @@ import com.tabula.domain.GetSessionUseCase
 import com.tabula.domain.IndexingProgressUseCase
 import com.tabula.domain.RefreshIndexUseCase
 import com.tabula.ui.TabulaNavGraph
+import com.tabula.ui.theme.TabulaTheme
 import com.tabula.viewmodel.TabulaViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge()
+        actionBar?.hide()
         val splashReady = androidx.compose.runtime.mutableStateOf(false)
         installSplashScreen().setKeepOnScreenCondition { !splashReady.value }
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -58,7 +57,8 @@ class MainActivity : ComponentActivity() {
                         deletePhotos,
                         refreshIndex,
                         indexingProgress,
-                        userPrefs
+                        userPrefs,
+                        repo
                     ) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
@@ -78,33 +78,7 @@ class MainActivity : ComponentActivity() {
                 withFrameNanos { splashReady.value = true }
             }
 
-            val isDarkTheme = when (themeMode) {
-                ThemeMode.DARK -> true
-                ThemeMode.LIGHT -> false
-                ThemeMode.SYSTEM -> isSystemInDarkTheme()
-            }
-
-            val colorScheme = if (isDarkTheme) {
-                darkColorScheme(
-                    primary = Color.White,
-                    onPrimary = Color.Black,
-                    background = Color.Black,
-                    onBackground = Color.White,
-                    surface = Color.Black,
-                    onSurface = Color.White
-                )
-            } else {
-                lightColorScheme(
-                    primary = Color.Black,
-                    onPrimary = Color.White,
-                    background = Color.White,
-                    onBackground = Color.Black,
-                    surface = Color.White,
-                    onSurface = Color.Black
-                )
-            }
-
-            MaterialTheme(colorScheme = colorScheme) {
+            TabulaTheme(themeMode = themeMode) {
                 val viewModel: TabulaViewModel = viewModel(factory = factory)
 
                 val uiState by viewModel.uiState.collectAsState()
@@ -120,7 +94,10 @@ class MainActivity : ComponentActivity() {
                     deletePermissionLauncher.launch(request)
                 }
 
-                TabulaNavGraph(userPreferencesRepository = userPrefs)
+                TabulaNavGraph(
+                    userPreferencesRepository = userPrefs,
+                    viewModel = viewModel
+                )
             }
         }
     }

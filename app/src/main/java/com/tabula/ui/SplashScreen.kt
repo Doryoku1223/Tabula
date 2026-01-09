@@ -1,5 +1,6 @@
 package com.tabula.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,52 +38,49 @@ fun SplashScreen(
     var titleFinished by remember { mutableStateOf(false) }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black)
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        OnboardingCard(
-            backgroundResId = R.drawable.bg_splash,
-            isLightCard = false
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+        Image(
+            painter = painterResource(id = R.drawable.bg_splash),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            TypewriterText(
+                text = stringResource(R.string.splash_title),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                ),
+                onFinished = { titleFinished = true }
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            TypewriterText(
+                text = stringResource(R.string.splash_subtitle),
+                start = titleFinished,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = Color.Black.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.Medium
+                )
+            )
+            Spacer(modifier = Modifier.height(28.dp))
+            Button(
+                onClick = onEnter,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Black,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.size(56.dp)
             ) {
-                TypewriterText(
-                    text = stringResource(R.string.splash_title),
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    onFinished = { titleFinished = true }
+                Text(
+                    text = stringResource(R.string.splash_enter),
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
                 )
-                Spacer(modifier = Modifier.height(12.dp))
-                TypewriterText(
-                    text = stringResource(R.string.splash_subtitle),
-                    start = titleFinished,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = Color.Black.copy(alpha = 0.8f),
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-                Button(
-                    onClick = onEnter,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.size(56.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.splash_enter),
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
             }
         }
-
     }
 }

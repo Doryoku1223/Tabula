@@ -8,10 +8,12 @@ import com.tabula.data.ThemeMode
 
 data class TabulaState(
     val photoStack: List<Photo> = emptyList(),
+    val previousPhoto: Photo? = null,
     val currentPhoto: Photo? = null,
     val nextPhoto: Photo? = null,
     val currentIndex: Int = 0,
     val totalCount: Int = 0,
+    val sessionMarkedCount: Int = 0,
     val curationMode: CurationMode = CurationMode.RANDOM,
     val sessionSize: Int = 15,
     val themeMode: ThemeMode = ThemeMode.DARK,
