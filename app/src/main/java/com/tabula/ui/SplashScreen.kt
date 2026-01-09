@@ -39,7 +39,10 @@ fun SplashScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        OnboardingCard(backgroundResId = R.drawable.bg_splash) {
+        OnboardingCard(
+            backgroundResId = R.drawable.bg_splash,
+            isLightCard = false
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

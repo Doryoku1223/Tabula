@@ -1,5 +1,6 @@
 package com.tabula.ui
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -44,13 +45,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
 import com.tabula.R
 import kotlinx.coroutines.delay
@@ -61,7 +65,8 @@ import kotlin.math.roundToInt
 data class OnboardingPage(
     val title: String,
     val desc: String,
-    val imageRes: Int
+    val imageRes: Int,
+    val isLightCard: Boolean
 )
 
 @Composable
@@ -75,29 +80,40 @@ fun OnboardingScreen(
             OnboardingPage(
                 title = "欢迎使用",
                 desc = "一切从零开始，重塑你的相册",
-                imageRes = R.drawable.bg_onboarding_flow
+                imageRes = R.drawable.bg_onboarding_flow,
+                isLightCard = true
             ),
             OnboardingPage(
                 title = "直觉式整理",
                 desc = "上滑 · 归档\n向右滑动 · 上一张\n向左滑动 · 下一张",
-                imageRes = R.drawable.bg_onboarding_flow
+                imageRes = R.drawable.bg_onboarding_flow,
+                isLightCard = true
             ),
             OnboardingPage(
                 title = "安全且自由",
                 desc = "所有运算完全本地运行。\n无需联网，你的隐私只属于你。",
-                imageRes = R.drawable.bg_onboarding_finish
+                imageRes = R.drawable.bg_onboarding_finish,
+                isLightCard = true
             ),
             OnboardingPage(
                 title = "准备好了吗？",
                 desc = "",
-                imageRes = R.drawable.bg_onboarding_finish
+                imageRes = R.drawable.bg_onboarding_finish,
+                isLightCard = true
             )
         )
     }
 
     val backgroundColor = Color(0xFF121212)
-    val indicatorColor = Color.White
-    val translationPx = with(LocalDensity.current) { 40.dp.toPx() }
+    val indicatorColor by animateColorAsState(
+        targetValue = if (pages.getOrNull(pagerState.currentPage)?.isLightCard == true) {
+            Color.Black
+        } else {
+            Color.White
+        },
+        animationSpec = tween(300),
+        label = "indicator_color"
+    )
     val configuration = LocalConfiguration.current
     val screenHeightPx = with(LocalDensity.current) { configuration.screenHeightDp.dp.toPx() }
 
@@ -113,14 +129,10 @@ fun OnboardingScreen(
             modifier = Modifier.fillMaxSize()
         ) { page ->
             val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-            val clampedOffset = pageOffset.absoluteValue.coerceIn(0f, 1f)
-            val scale = 1f - (0.15f * clampedOffset)
-            val alpha = 1f - (0.3f * clampedOffset)
-            val zIndex = when {
-                clampedOffset < 0.01f -> 2f
-                pageOffset < 0f -> 1f
-                else -> 0f
-            }
+            val absOffset = pageOffset.absoluteValue.coerceIn(0f, 1f)
+            val scale = lerp(0.9f, 1f, 1f - absOffset)
+            val alpha = 1f - (0.3f * absOffset)
+            val overlapFactor = with(LocalDensity.current) { 260.dp.toPx() }
 
             val scope = rememberCoroutineScope()
             val swipeOffsetY = remember(page) { Animatable(0f) }
@@ -147,25 +159,25 @@ fun OnboardingScreen(
                                     val flyJob = launch {
                                         swipeOffsetY.animateTo(
                                             targetValue = -screenHeightPx,
-                                            animationSpec = spring(dampingRatio = 0.85f, stiffness = 280f)
+                                            animationSpec = tween(durationMillis = 600)
                                         )
                                     }
                                     val fadeJob = launch {
-                                        swipeAlpha.animateTo(0f, animationSpec = tween(durationMillis = 200))
+                                        swipeAlpha.animateTo(0f, animationSpec = tween(durationMillis = 120))
                                     }
                                     flyJob.join()
                                     fadeJob.join()
-                                    delay(600)
+                                    delay(150)
                                     swipeOffsetY.snapTo(screenHeightPx * 0.35f)
                                     swipeAlpha.snapTo(0f)
                                     val riseJob = launch {
                                         swipeOffsetY.animateTo(
                                             targetValue = 0f,
-                                            animationSpec = spring(dampingRatio = 0.9f, stiffness = 320f)
+                                            animationSpec = spring(dampingRatio = 0.85f, stiffness = 520f)
                                         )
                                     }
                                     val appearJob = launch {
-                                        swipeAlpha.animateTo(1f, animationSpec = tween(durationMillis = 260))
+                                        swipeAlpha.animateTo(1f, animationSpec = tween(durationMillis = 160))
                                     }
                                     riseJob.join()
                                     appearJob.join()
@@ -173,7 +185,7 @@ fun OnboardingScreen(
                                 } else {
                                     swipeOffsetY.animateTo(
                                         targetValue = 0f,
-                                        animationSpec = spring(dampingRatio = 0.9f, stiffness = 320f)
+                                        animationSpec = spring(dampingRatio = 0.85f, stiffness = 520f)
                                     )
                                 }
                             }
@@ -188,24 +200,19 @@ fun OnboardingScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        translationX = pageOffset * translationPx
+                        translationX = pageOffset * overlapFactor
                         scaleX = scale
                         scaleY = scale
                         rotationZ = pageOffset * -10f
                         this.alpha = alpha
+                        transformOrigin = TransformOrigin(0.5f, 1f)
                     }
-                    .zIndex(zIndex),
+                    .zIndex(1f - absOffset),
                 contentAlignment = Alignment.Center
             ) {
-                val scrim = if (page == 0 || page == 3) {
-                    Color.White.copy(alpha = 0.9f)
-                } else {
-                    Color.Black.copy(alpha = 0.18f)
-                }
-
                 OnboardingCard(
                     backgroundResId = pages[page].imageRes,
-                    scrimColor = scrim,
+                    isLightCard = pages[page].isLightCard,
                     modifier = Modifier
                         .offset { IntOffset(0, swipeOffsetY.value.roundToInt()) }
                         .alpha(swipeAlpha.value)
@@ -222,8 +229,8 @@ fun OnboardingScreen(
 
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp),
+                .align(Alignment.Center)
+                .offset(y = 220.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             repeat(pages.size) { index ->
@@ -247,8 +254,7 @@ private fun OnboardingPageContent(
     data: OnboardingPage,
     onFinish: () -> Unit
 ) {
-    val isLightCard = page == 0 || page == 3
-    val textColor = if (isLightCard) Color.Black else Color.White
+    val textColor = if (data.isLightCard) Color.Black else Color.White
     val accentBlue = Color(0xFF1E88E5)
     val infiniteTransition = rememberInfiniteTransition(label = "onboarding_arrow")
     val bounceOffset by infiniteTransition.animateFloat(
@@ -279,10 +285,14 @@ private fun OnboardingPageContent(
     ) {
         when (page) {
             0 -> {
-                Text(
+                TypewriterText(
                     text = data.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = textColor.copy(alpha = 0.8f)
+                    typeDelayMs = 100L,
+                    cursorBlinkMs = 500L,
+                    fontFamily = FontFamily.Monospace,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = textColor.copy(alpha = 0.85f)
+                    )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -295,7 +305,7 @@ private fun OnboardingPageContent(
                 Text(
                     text = data.desc,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = textColor.copy(alpha = 0.7f)
+                    color = textColor.copy(alpha = 0.75f)
                 )
             }
             1 -> {

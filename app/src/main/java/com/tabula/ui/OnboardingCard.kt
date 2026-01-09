@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun OnboardingCard(
     backgroundResId: Int,
+    isLightCard: Boolean,
     modifier: Modifier = Modifier,
-    scrimColor: Color = Color.Black.copy(alpha = 0.3f),
     content: @Composable () -> Unit
 ) {
     val shape = RoundedCornerShape(26.dp)
@@ -37,17 +37,19 @@ fun OnboardingCard(
             .clip(shape),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = backgroundResId),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(scrimColor)
-        )
+        if (!isLightCard) {
+            Image(
+                painter = painterResource(id = backgroundResId),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()

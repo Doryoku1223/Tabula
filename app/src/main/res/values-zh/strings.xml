@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tabula</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_section_general">通用</string>
+    <string name="settings_section_appearance_language">外观与语言</string>
+    <string name="settings_section_about">关于</string>
+    <string name="settings_session_size_format">每组数量：%1$d</string>
+    <string name="settings_curation_mode">清理模式</string>
+    <string name="settings_smart_clean">智能清理</string>
+    <string name="settings_random_walk">随机漫步</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_theme_light">浅色</string>
+    <string name="settings_theme_dark">深色</string>
+    <string name="settings_theme_system">跟随系统</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_language_cn">中文 (CN)</string>
+    <string name="settings_language_en">English (EN)</string>
+    <string name="settings_rescan_library">重新扫描图库</string>
+    <string name="settings_about_description">Tabula 帮你重新发现与整理你的回忆。</string>
+    <string name="settings_version">版本 1.0.0</string>
+    <string name="settings_limited_access_title">检测到受限访问</string>
+    <string name="settings_limited_access_message">为保证“随机漫步”正常工作，请允许访问全部照片。</string>
+
+    <string name="action_change_set">换一组</string>
+    <string name="action_burn_trash">销毁回收站</string>
+    <string name="action_restore_format">恢复（%1$d）</string>
+    <string name="action_delete_format">删除（%1$d）</string>
+    <string name="action_restore">恢复</string>
+    <string name="action_delete">删除</string>
+    <string name="action_cancel">取消</string>
+
+    <string name="indexing_library">正在索引图库...</string>
+    <string name="session_complete_title">本组已完成</string>
+    <string name="session_complete_subtitle">你已查看 %1$d 张照片。</string>
+    <string name="session_index_format">%1$d/%2$d</string>
+
+    <string name="confirm_delete_title">删除 %1$d 张照片？</string>
+    <string name="confirm_delete_message">此操作无法撤销。</string>
+
+    <string name="content_desc_review">回收站</string>
+    <string name="content_desc_settings">设置</string>
+    <string name="content_desc_back">返回</string>
+    <string name="content_desc_selected">已选择</string>
+
+    <string name="permission_photos">请授权访问照片</string>
+    <string name="permission_grant">授权访问</string>
+
+    <string name="splash_title">Tabula</string>
+    <string name="splash_subtitle">重拾 · 秩序</string>
+    <string name="splash_enter">进入</string>
+
+    <string name="onboarding_title_1">欢迎使用 Tabula</string>
+    <string name="onboarding_subtitle_1">一切归零，重塑你的相册</string>
+    <string name="onboarding_title_2">直觉式整理</string>
+    <string name="onboarding_gesture_up">上滑 · 归档</string>
+    <string name="onboarding_gesture_side">左右 · 回顾</string>
+    <string name="onboarding_title_3">安全且自由</string>
+    <string name="onboarding_subtitle_3">删除前随时反悔，\n你的回忆很安全。</string>
+    <string name="onboarding_title_4">准备好了吗？</string>
+    <string name="onboarding_action_start">开始整理</string>
+    <string name="home_permission_title">需要访问权限</string>
+    <string name="home_permission_body">Tabula 所有的运算都在本地完成。\n我们需要访问相册以开始整理。</string>
+    <string name="home_permission_action">授权访问</string>
+    <string name="home_permission_denied_title">权限被拒绝</string>
+    <string name="home_permission_denied_body">请在系统设置中允许 Tabula 访问相册。</string>
+    <string name="home_permission_settings">去设置</string>
+    <string name="home_loading">Tabula...</string>
+    <string name="home_photos_left">还剩 %1$d 张</string>
+</resources>
