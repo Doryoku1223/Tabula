@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="path/to/your/icon.png" width="120" alt="Tabula Logo">
+  <img src="app/src/release/ic_launcher-playstore.png" width="120" alt="Tabula Logo">
 </p>
 
 <h1 align="center">Tabula | 重拾 · 秩序</h1>
@@ -21,47 +21,45 @@
 
 ---
 
-## ? 最新发布 (Latest Release)
+## :sparkles: 最新发布 (Latest Release)
 
-> **? 更新日期：2026.1.11**
+> **:calendar: 更新日期：2026.1.11**
 >
-> **?? 版本：v1.0.5**
+> **:label: 版本：v1.0.5**
 
-### ? 更新说明
-* **新增**：全新的“随机漫步”清理模式，每次随机抽取 15 张照片。
-* **优化**：重构了设置页面 UI，采用黑白极简风格。
-* **功能**：上线“回收站”功能，支持误删恢复与一键彻底粉碎。
-* **体验**：优化了滑动卡片的手感，左滑保留，上滑归档。
+### :rocket: 本次更新说明
+* **:new: 新增**：全新的“随机漫步”清理模式，每次随机抽取 15 张照片。
+* **:art: 优化**：重构了设置页面 UI，采用黑白极简风格。
+* **:point_up_2: 体验**：优化了滑动卡片的手感，左滑保留，上滑归档。
 
 <div align="center">
 
-### ? [点击下载最新 APK (Download .apk)](./app/release/app-release.apk)
-*(或者填写您的 releases 页面链接)*
+### :inbox_tray: [点击下载最新 APK (Download .apk)](./app/release/app-release.apk)
 
 </div>
 
 ---
 
-## ? 应用预览 (Showcase)
+## :iphone: 应用预览 (Showcase)
 
 <table align="center" style="border:none;">
   <tr>
     <td align="center" width="33%">
-      <img src="docs/images/???.png" width="100%" alt="主界面">
+      <img src="docs/images/使用图.png" width="100%" alt="主界面">
       <br>
       <b>极简主页</b><br>
       每次 15 张，无压清理
     </td>
     <td align="center" width="33%">
-      <img src="docs/images/???.png" width="100%" alt="滑动交互">
+      <img src="docs/images/归档操作.png" width="100%" alt="滑动交互">
       <br>
       <b>直觉交互</b><br>
       上滑删除，左右保留
     </td>
     <td align="center" width="33%">
-      <img src="docs/images/????.png" width="100%" alt="极简设置">
+      <img src="docs/images/启动页.png" width="100%" alt="极简设置">
       <br>
-      <b>黑白美学</b><br>
+      <b>设计美学</b><br>
       纯粹的视觉体验
     </td>
   </tr>
@@ -71,35 +69,34 @@
 
 ---
 
-## ? 核心特性 (Features)
+## :star2: 核心特性 (Features)
 
-* **? 禅意模式**：拒绝焦虑，每次只推送 15 张照片，碎片时间即可完成整理。
-* **? 手势操作**：借鉴卡片式交互，左滑/右滑/上滑，单手即可轻松操作。
-* **?? 隐私优先**：**仅本地处理 (Local Only)**。Tabula 不需要联网权限，您的照片绝不会上传到任何服务器。
-* **? 深色模式**：完美适配 Android 深色主题，夜间整理更护眼。
-* **?? 后悔药机制**：所有删除操作进入“回收站”，给您二次确认的机会。
+* **:beginner: 禅意模式**：拒绝焦虑，每次只推送 15 张照片，碎片时间即可完成整理。
+* **:point_up: 手势操作**：借鉴卡片式交互，左滑/右滑/上滑，单手即可轻松操作。
+* **:shield: 隐私优先**：**仅本地处理 (Local Only)**。Tabula 不需要联网权限，您的照片绝不会上传到任何服务器。
+* **:moon: 深色模式**：完美适配 Android 深色主题，夜间整理更护眼。
+* **:wastebasket: 后悔药机制**：所有删除操作进入“回收站”，给您二次确认的机会。
 
 ---
 
-## ? 隐私承诺 (Privacy Policy)
+## :lock: 隐私承诺 (Privacy Policy)
 
 我们深知照片是您最私密的数据。
 **Tabula 承诺：**
-1.  不申请互联网权限。
-2.  不收集任何用户行为数据。
-3.  所有图片处理（分析、删除）均在您的手机本地完成。
+1. :no_entry_sign: 不申请互联网权限。
+2. :eye_off: 不收集任何用户行为数据。
+3. :mobile_phone_off: 所有图片处理（分析、删除）均在您的手机本地完成。
 
 ---
 
-## ? 反馈与建议 (Feedback)
+## :speech_balloon: 反馈与建议 (Feedback)
 
 如果您在使用过程中遇到 Bug，或有新的功能建议，欢迎通过以下方式联系：
 
-* 提交 [Issues](https://github.com/您的用户名/Tabula/issues)
-* 发送邮件至：your_email@example.com
+* 提交 [Issues](https://github.com/Doryoku1223/Tabula/issues)
 
 ---
 
 <p align="center">
-  Made with ?? for Android
+  Made with :heart: for Android
 </p>
