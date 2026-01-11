@@ -34,8 +34,7 @@
 
 <div align="center">
 
-### :inbox_tray: [点击下载最新 APK (Download .apk)](./app/release/app-release.apk)
-
+### :inbox_tray: [点击下载最新 APK (Download .apk)](https://github.com/Doryoku1223/Tabula/releases/download/v1.0.5/TabulaV1.0.5.apk)
 </div>
 
 ---
