@@ -46,10 +46,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,20 +58,24 @@ import com.tabula.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.abs
-import kotlin.math.sin
-import kotlin.random.Random
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.PartyFactory
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.Spread
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.core.models.Shape
+import nl.dionsegijn.konfetti.core.models.Size
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun TabulaScreen(
-    viewModel: TabulaViewModel
+    viewModel: TabulaViewModel,
+    onOpenSettings: () -> Unit,
+    onOpenReview: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
-    var showSettings by remember { mutableStateOf(false) }
-    var showReview by remember { mutableStateOf(false) }
     val bg = MaterialTheme.colorScheme.background
     val fg = MaterialTheme.colorScheme.onBackground
     val context = LocalContext.current
@@ -126,27 +128,7 @@ fun TabulaScreen(
         }
     }
 
-    LaunchedEffect(state.isSessionComplete) {
-        if (state.isSessionComplete) {
-            showReview = false
-        }
-    }
-
-    if (showSettings) {
-        SettingsScreen(
-            sessionSize = state.sessionSize,
-            curationMode = state.curationMode,
-            themeMode = state.themeMode,
-            languageMode = state.languageMode,
-            isLimitedAccess = state.isLimitedAccess,
-            onBack = { showSettings = false },
-            onSessionSizeChange = { viewModel.updateSessionSize(it) },
-            onCurationModeChange = { viewModel.updateCurationMode(it) },
-            onThemeModeChange = { viewModel.updateThemeMode(it) },
-            onLanguageModeChange = { viewModel.updateLanguage(it) },
-            onRescanLibrary = { viewModel.rescanLibrary() }
-        )
-    } else if (!hasPermission) {
+    if (!hasPermission) {
         PermissionRequest(
             onRequestPermission = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -195,14 +177,14 @@ fun TabulaScreen(
                         color = fg
                     )
                     Row {
-                        IconButton(onClick = { showReview = !showReview }) {
+                        IconButton(onClick = onOpenReview) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = stringResource(R.string.content_desc_review),
                                 tint = fg
                             )
                         }
-                        IconButton(onClick = { showSettings = true }) {
+                        IconButton(onClick = onOpenSettings) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
                                 contentDescription = stringResource(R.string.content_desc_settings),
@@ -214,7 +196,6 @@ fun TabulaScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                val shouldShowReview = showReview
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -222,20 +203,13 @@ fun TabulaScreen(
                         .padding(horizontal = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (shouldShowReview) {
-                        ReviewScreen(
-                            trashBin = state.trashBin,
-                            onConfirmBurn = { viewModel.confirmBurn() },
-                            onRestoreSelected = { selected -> viewModel.restoreSelected(selected) },
-                            onDeleteSelected = { selected -> viewModel.deleteSelected(selected) }
-                        )
-                    } else if (state.currentPhoto == null) {
+                    if (state.currentPhoto == null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 16.dp)
                         ) {
-                            ConfettiOverlay(
+                            SummaryConfetti(
                                 isActive = state.isSessionComplete,
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -274,7 +248,6 @@ fun TabulaScreen(
                                 Spacer(modifier = Modifier.height(24.dp))
                                 Button(
                                     onClick = {
-                                        showReview = false
                                         viewModel.refreshSession()
                                     },
                                     colors = ButtonDefaults.buttonColors(
@@ -305,7 +278,7 @@ fun TabulaScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (state.currentPhoto != null && !shouldShowReview) {
+                if (state.currentPhoto != null) {
                     val remaining = (state.photoStack.size - state.currentIndex + 1).coerceAtLeast(0)
                     Text(
                         text = stringResource(R.string.session_remaining_format, remaining),
@@ -361,66 +334,42 @@ fun TabulaScreen(
 }
 
 @Composable
-private fun ConfettiOverlay(
+private fun SummaryConfetti(
     isActive: Boolean,
     modifier: Modifier = Modifier
 ) {
     if (!isActive) return
-    val progress = remember(isActive) { Animatable(0f) }
-    val particles = remember(isActive) { generateConfetti() }
-
-    LaunchedEffect(isActive) {
-        progress.snapTo(0f)
-        progress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 1200)
-        )
+    val parties = remember(isActive) {
+        if (isActive) listOf(createSummaryParty()) else emptyList()
     }
-
-    Canvas(modifier = modifier) {
-        val canvasSize = size
-        particles.forEach { particle ->
-            val y = particle.startY + (canvasSize.height + 200f) * progress.value
-            val x = particle.startX * canvasSize.width + sin(progress.value * 6f + particle.phase) * 24f
-            val alpha = 1f - abs(progress.value - 0.6f).coerceIn(0f, 1f)
-            rotate(particle.rotation + progress.value * 180f, Offset(x, y)) {
-                drawRect(
-                    color = particle.color.copy(alpha = alpha.coerceIn(0.15f, 1f)),
-                    topLeft = Offset(x, y),
-                    size = Size(particle.size, particle.size * 0.6f)
-                )
-            }
-        }
-    }
+    KonfettiView(
+        modifier = modifier,
+        parties = parties
+    )
 }
 
-private data class ConfettiParticle(
-    val startX: Float,
-    val startY: Float,
-    val size: Float,
-    val color: Color,
-    val rotation: Float,
-    val phase: Float
-)
-
-private fun generateConfetti(): List<ConfettiParticle> {
-    val palette = listOf(
-        Color(0xFFFC6DAB),
-        Color(0xFFF9A826),
-        Color(0xFF5BC0EB),
-        Color(0xFF9BE15D),
-        Color(0xFFFDE74C)
+private fun createSummaryParty(): Party {
+    val colors = listOf(
+        Color(0xFFFC6DAB).toArgb(),
+        Color(0xFFF9A826).toArgb(),
+        Color(0xFF5BC0EB).toArgb(),
+        Color(0xFF9BE15D).toArgb(),
+        Color(0xFFFDE74C).toArgb()
     )
-    return List(36) {
-        ConfettiParticle(
-            startX = Random.nextFloat(),
-            startY = -Random.nextFloat() * 400f,
-            size = 10f + Random.nextFloat() * 10f,
-            color = palette[Random.nextInt(palette.size)],
-            rotation = Random.nextFloat() * 360f,
-            phase = Random.nextFloat() * 6f
-        )
-    }
+    val emitter = Emitter(duration = 220, timeUnit = TimeUnit.MILLISECONDS)
+        .max(140)
+    return PartyFactory(emitter)
+        .angle(Angle.BOTTOM)
+        .spread(Spread.WIDE)
+        .setSpeedBetween(6f, 22f)
+        .setDamping(0.85f)
+        .sizes(listOf(Size.SMALL, Size.MEDIUM, Size.LARGE))
+        .shapes(listOf(Shape.Square, Shape.Rectangle(0.6f), Shape.Circle))
+        .colors(colors)
+        .timeToLive(2200L)
+        .fadeOutEnabled(true)
+        .position(Position.Relative(0.5, 0.0))
+        .build()
 }
 
 @Composable

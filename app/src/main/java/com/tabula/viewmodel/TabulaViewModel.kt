@@ -37,6 +37,7 @@ class TabulaViewModel(
     init {
         observeIndexing()
         observePreferences()
+        startAutoRescan()
         loadTrashBin()
         rescanLibrary()
     }
@@ -81,9 +82,12 @@ class TabulaViewModel(
     }
 
     fun updateSessionSize(size: Int) {
-        val normalized = size.coerceIn(5, 50)
+        val normalized = size.coerceIn(5, 25)
         _uiState.update { state ->
             state.copy(sessionSize = normalized)
+        }
+        viewModelScope.launch {
+            userPreferencesRepository.setSessionSize(normalized)
         }
         refreshSession()
     }
@@ -91,6 +95,9 @@ class TabulaViewModel(
     fun updateCurationMode(mode: CurationMode) {
         _uiState.update { state ->
             state.copy(curationMode = mode)
+        }
+        viewModelScope.launch {
+            userPreferencesRepository.setCurationMode(mode)
         }
         refreshSession()
     }
@@ -305,6 +312,16 @@ class TabulaViewModel(
                 _uiState.update { state -> state.copy(languageMode = mode) }
             }
         }
+        viewModelScope.launch {
+            userPreferencesRepository.sessionSizeFlow.collect { size ->
+                _uiState.update { state -> state.copy(sessionSize = size.coerceIn(5, 25)) }
+            }
+        }
+        viewModelScope.launch {
+            userPreferencesRepository.curationModeFlow.collect { mode ->
+                _uiState.update { state -> state.copy(curationMode = mode) }
+            }
+        }
     }
 
     private fun loadNewSession() {
@@ -367,6 +384,15 @@ class TabulaViewModel(
         viewModelScope.launch {
             val trash = photoRepository.getTrashPhotos()
             _uiState.update { state -> state.copy(trashBin = trash) }
+        }
+    }
+
+    private fun startAutoRescan() {
+        viewModelScope.launch {
+            while (true) {
+                kotlinx.coroutines.delay(30L * 24 * 60 * 60 * 1000L)
+                refreshIndexUseCase()
+            }
         }
     }
 

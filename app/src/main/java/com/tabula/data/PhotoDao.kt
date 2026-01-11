@@ -19,6 +19,9 @@ interface PhotoDao {
     @Query("SELECT * FROM photos ORDER BY dateTaken ASC")
     suspend fun getAllPhotosByDateAsc(): List<PhotoEntity>
 
+    @Query("SELECT MAX(dateTaken) FROM photos")
+    suspend fun getMaxDateTaken(): Long?
+
     @Query("DELETE FROM photos")
     suspend fun deleteAll()
 }

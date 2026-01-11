@@ -13,7 +13,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.5"
     }
 
     buildFeatures {
@@ -55,6 +55,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.navigation:navigation-compose:2.8.7")
+    implementation("nl.dionsegijn:konfetti-compose:2.0.4")
 
     implementation("com.google.android.material:material:1.11.0")
     implementation("io.coil-kt:coil-compose:2.6.0")

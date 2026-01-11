@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tabula</string>
 
@@ -9,6 +9,14 @@
     <string name="settings_section_region">Region</string>
     <string name="settings_section_appearance_language">Appearance &amp; Language</string>
     <string name="settings_section_about">About</string>
+    <string name="settings_section_count">Count</string>
+    <string name="settings_session_size_label">Photos per set</string>
+    <string name="settings_section_mode">Mode</string>
+    <string name="settings_section_preferences">Preferences</string>
+    <string name="settings_theme_label">Appearance</string>
+    <string name="settings_language_label">Language</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_trust_badge">Tabula Secure - Local only</string>
     <string name="settings_session_size_format">Session Size: %1$d</string>
     <string name="settings_curation_mode">Curation Mode</string>
     <string name="settings_smart_clean">Smart Clean</string>
@@ -18,12 +26,20 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_language">Language</string>
-    <string name="settings_language_cn">中文 (CN)</string>
+    <string name="settings_language_cn">Chinese (CN)</string>
     <string name="settings_language_en">English (EN)</string>
     <string name="settings_rescan_library">Re-scan Library</string>
     <string name="settings_privacy_title">On-device only</string>
     <string name="settings_privacy_description">Your photos stay on this device. No cloud sync, no uploads.</string>
     <string name="settings_about_description">Tabula helps you rediscover and curate your memories.</string>
+    <string name="settings_about_us">About Us</string>
+    <string name="about_tagline">Tabula helps you rediscover and curate your memories.</string>
+    <string name="about_version_date">Version date: 2026.1.11</string>
+    <string name="about_features">Features: Random Walk curation, swipe review, trash restore, and permanent delete.</string>
+    <string name="about_github_label">GitHub</string>
+    <string name="about_github_url">https://github.com/Doryoku1223/Tabula</string>
+    <string name="about_github_note">Issues and suggestions welcome.</string>
+    <string name="about_github_copied">Link copied</string>
     <string name="settings_version">Version 1.0.0</string>
     <string name="settings_version_format">Version %1$s</string>
     <string name="settings_limited_access_title">Limited Access Detected</string>
@@ -64,18 +80,18 @@
     <string name="permission_grant">Grant Access</string>
 
     <string name="splash_title">Tabula</string>
-    <string name="splash_subtitle">重拾 · 秩序</string>
-    <string name="splash_enter">进入</string>
+    <string name="splash_subtitle">Rediscover - Curate</string>
+    <string name="splash_enter">Enter</string>
 
-    <string name="onboarding_title_1">欢迎使用 Tabula</string>
-    <string name="onboarding_subtitle_1">一切归零，重塑你的相册</string>
-    <string name="onboarding_title_2">直觉式整理</string>
-    <string name="onboarding_gesture_up">上滑 · 归档</string>
-    <string name="onboarding_gesture_side">左右 · 回顾</string>
-    <string name="onboarding_title_3">安全且自由</string>
-    <string name="onboarding_subtitle_3">删除前随时反悔，\n你的回忆很安全。</string>
-    <string name="onboarding_title_4">准备好了吗？</string>
-    <string name="onboarding_action_start">开始整理</string>
+    <string name="onboarding_title_1">Welcome to Tabula</string>
+    <string name="onboarding_subtitle_1">Zero clutter, rebuilt into your albums</string>
+    <string name="onboarding_title_2">Intuitive cleaning</string>
+    <string name="onboarding_gesture_up">Swipe up - Archive</string>
+    <string name="onboarding_gesture_side">Left/right - Review</string>
+    <string name="onboarding_title_3">Safe and local</string>
+    <string name="onboarding_subtitle_3">Undo before delete,\nyour memories stay safe</string>
+    <string name="onboarding_title_4">Ready to start?</string>
+    <string name="onboarding_action_start">Start cleaning</string>
     <string name="home_permission_title">Storage access required</string>
     <string name="home_permission_body">Tabula works entirely on device.\nWe need photo access to start.</string>
     <string name="home_permission_action">Grant Access</string>

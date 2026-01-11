@@ -34,9 +34,11 @@ fun FullScreenImageDialog(
                 .fillMaxSize()
                 .background(Color.Black)
                 .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, zoom, _ ->
+                    detectTransformGestures { _, _, zoom, _ ->
                         scale = (scale * zoom).coerceIn(1f, 5f)
-                        offset += pan
+                        if (scale == 1f) {
+                            offset = Offset.Zero
+                        }
                     }
                 }
                 .pointerInput(Unit) {

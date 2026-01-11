@@ -85,12 +85,23 @@ class PhotoRepository(private val context: Context) : PhotoDataSource {
             Images.Media.DATE_TAKEN,
             Images.Media.DATE_ADDED
         )
+        val lastDateTaken = photoDao.getMaxDateTaken()
+        val selection = if (lastDateTaken != null) {
+            "${Images.Media.DATE_TAKEN} > ? OR ${Images.Media.DATE_ADDED} > ?"
+        } else {
+            null
+        }
+        val selectionArgs = if (lastDateTaken != null) {
+            arrayOf(lastDateTaken.toString(), (lastDateTaken / 1000L).toString())
+        } else {
+            null
+        }
 
         val cursor = context.contentResolver.query(
             Images.Media.EXTERNAL_CONTENT_URI,
             projection,
-            null,
-            null,
+            selection,
+            selectionArgs,
             "${Images.Media.DATE_TAKEN} ASC"
         )
 
@@ -123,7 +134,9 @@ class PhotoRepository(private val context: Context) : PhotoDataSource {
             }
         }
 
-        photoDao.deleteAll()
+        if (lastDateTaken == null) {
+            photoDao.deleteAll()
+        }
         if (buffer.isNotEmpty()) {
             photoDao.insertAll(buffer)
         }

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -30,13 +30,14 @@ import com.tabula.domain.RefreshIndexUseCase
 import com.tabula.ui.TabulaNavGraph
 import com.tabula.ui.theme.TabulaTheme
 import com.tabula.viewmodel.TabulaViewModel
+import kotlinx.coroutines.flow.map
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        actionBar?.hide()
+        supportActionBar?.hide()
         val splashReady = androidx.compose.runtime.mutableStateOf(false)
         installSplashScreen().setKeepOnScreenCondition { !splashReady.value }
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -67,12 +68,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val themeMode by userPrefs.themeModeFlow.collectAsState(initial = ThemeMode.DARK)
-            val languageMode by userPrefs.languageFlow.collectAsState(initial = LanguageMode.CN)
+            val languageMode by userPrefs.languageFlow
+                .map<LanguageMode, LanguageMode?> { it }
+                .collectAsState(initial = null)
             val onboardingCompleted by userPrefs.onboardingCompletedFlow.collectAsState(initial = false)
 
             LaunchedEffect(languageMode) {
-                val tags = if (languageMode == LanguageMode.CN) "zh-CN" else "en"
-                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tags))
+                val mode = languageMode ?: return@LaunchedEffect
+                val tags = if (mode == LanguageMode.CN) "zh-CN" else "en"
+                val currentTags = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+                if (currentTags != tags) {
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tags))
+                }
             }
             LaunchedEffect(onboardingCompleted) {
                 withFrameNanos { splashReady.value = true }
