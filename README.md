@@ -2,10 +2,10 @@
   <img src="app/src/release/ic_launcher-playstore.png" width="120" alt="Tabula Logo">
 </p>
 
-<h1 align="center">Tabula | ÖØÊ° ¡¤ ÖÈÐò</h1>
+<h1 align="center">Tabula | é‡æ‹¾ Â· ç§©åº</h1>
 
 <p align="center">
-  <strong>¼«¼òÖ÷ÒåÏà²áÕûÀí¹¤¾ß / Minimalist Photo Cleaner</strong>
+  <strong>æžç®€ä¸»ä¹‰ç›¸å†Œæ•´ç†å·¥å…· / Minimalist Photo Cleaner</strong>
 </p>
 
 <p align="center">
@@ -14,85 +14,90 @@
   <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" alt="License">
 </p>
 
+## æœ€æ–°ç‰ˆæœ¬TabulaV3 
+https://github.com/Doryoku1223/TabulaV3
+
+
+
 <p align="center">
-  Tabula °ïÄãÖØÐÂ·¢ÏÖÓëÕûÀíÄãµÄ»ØÒä¡£<br>
-  Ã»ÓÐ·±ÔÓµÄ¸ÉÈÅ£¬Ö»ÓÐ´¿´âµÄÕûÀíÌåÑé¡£
+  Tabula å¸®ä½ é‡æ–°å‘çŽ°ä¸Žæ•´ç†ä½ çš„å›žå¿†ã€‚<br>
+  æ²¡æœ‰ç¹æ‚çš„å¹²æ‰°ï¼Œåªæœ‰çº¯ç²¹çš„æ•´ç†ä½“éªŒã€‚
 </p>
 
 ---
 
-## :sparkles: ×îÐÂ·¢²¼ (Latest Release)
+## :sparkles: æœ€æ–°å‘å¸ƒ (Latest Release)
 
-> **:calendar: ¸üÐÂÈÕÆÚ£º2026.1.11**
+> **:calendar: æ›´æ–°æ—¥æœŸï¼š2026.1.11**
 >
-> **:label: °æ±¾£ºv1.0.5**
+> **:label: ç‰ˆæœ¬ï¼šv1.0.5**
 
-### :rocket: ±¾´Î¸üÐÂËµÃ÷
-* **:new: ÐÂÔö**£ºÈ«ÐÂµÄ¡°Ëæ»úÂþ²½¡±ÇåÀíÄ£Ê½£¬Ã¿´ÎËæ»ú³éÈ¡ 15 ÕÅÕÕÆ¬¡£
-* **:art: ÓÅ»¯**£ºÖØ¹¹ÁËÉèÖÃÒ³Ãæ UI£¬²ÉÓÃºÚ°×¼«¼ò·ç¸ñ¡£
-* **:point_up_2: ÌåÑé**£ºÓÅ»¯ÁË»¬¶¯¿¨Æ¬µÄÊÖ¸Ð£¬×ó»¬±£Áô£¬ÉÏ»¬¹éµµ¡£
+### :rocket: æœ¬æ¬¡æ›´æ–°è¯´æ˜Ž
+* **:new: æ–°å¢ž**ï¼šå…¨æ–°çš„â€œéšæœºæ¼«æ­¥â€æ¸…ç†æ¨¡å¼ï¼Œæ¯æ¬¡éšæœºæŠ½å– 15 å¼ ç…§ç‰‡ã€‚
+* **:art: ä¼˜åŒ–**ï¼šé‡æž„äº†è®¾ç½®é¡µé¢ UIï¼Œé‡‡ç”¨é»‘ç™½æžç®€é£Žæ ¼ã€‚
+* **:point_up_2: ä½“éªŒ**ï¼šä¼˜åŒ–äº†æ»‘åŠ¨å¡ç‰‡çš„æ‰‹æ„Ÿï¼Œå·¦æ»‘ä¿ç•™ï¼Œä¸Šæ»‘å½’æ¡£ã€‚
 
 <div align="center">
 
-### :inbox_tray: [µã»÷ÏÂÔØ×îÐÂ APK (Download .apk)](https://github.com/Doryoku1223/Tabula/releases/download/v1.0.5/TabulaV1.0.5.apk)
+### :inbox_tray: [ç‚¹å‡»ä¸‹è½½æœ€æ–° APK (Download .apk)](https://github.com/Doryoku1223/Tabula/releases/download/v1.0.5/TabulaV1.0.5.apk)
 </div>
 
 ---
 
-## :iphone: Ó¦ÓÃÔ¤ÀÀ (Showcase)
+## :iphone: åº”ç”¨é¢„è§ˆ (Showcase)
 
 <table align="center" style="border:none;">
   <tr>
     <td align="center" width="33%">
-      <img src="docs/images/Ê¹ÓÃÍ¼.png" width="100%" alt="Ö÷½çÃæ">
+      <img src="docs/images/ä½¿ç”¨å›¾.png" width="100%" alt="ä¸»ç•Œé¢">
       <br>
-      <b>¼«¼òÖ÷Ò³</b><br>
-      Ã¿´Î 15 ÕÅ£¬ÎÞÑ¹ÇåÀí
+      <b>æžç®€ä¸»é¡µ</b><br>
+      æ¯æ¬¡ 15 å¼ ï¼Œæ— åŽ‹æ¸…ç†
     </td>
     <td align="center" width="33%">
-      <img src="docs/images/¹éµµ²Ù×÷.png" width="100%" alt="»¬¶¯½»»¥">
+      <img src="docs/images/å½’æ¡£æ“ä½œ.png" width="100%" alt="æ»‘åŠ¨äº¤äº’">
       <br>
-      <b>Ö±¾õ½»»¥</b><br>
-      ÉÏ»¬É¾³ý£¬×óÓÒ±£Áô
+      <b>ç›´è§‰äº¤äº’</b><br>
+      ä¸Šæ»‘åˆ é™¤ï¼Œå·¦å³ä¿ç•™
     </td>
     <td align="center" width="33%">
-      <img src="docs/images/Æô¶¯Ò³.png" width="100%" alt="¼«¼òÉèÖÃ">
+      <img src="docs/images/å¯åŠ¨é¡µ.png" width="100%" alt="æžç®€è®¾ç½®">
       <br>
-      <b>Éè¼ÆÃÀÑ§</b><br>
-      ´¿´âµÄÊÓ¾õÌåÑé
+      <b>è®¾è®¡ç¾Žå­¦</b><br>
+      çº¯ç²¹çš„è§†è§‰ä½“éªŒ
     </td>
   </tr>
 </table>
 
-> *¡°ÔÚÕûÀíÏà²áµÄ¹ý³ÌÖÐ£¬²»½öÊÇÊÍ·Å¿Õ¼ä£¬¸üÊÇÓë»ØÒäµÄÒ»´Î´ÎÖØ·ê¡£¡±*
+> *â€œåœ¨æ•´ç†ç›¸å†Œçš„è¿‡ç¨‹ä¸­ï¼Œä¸ä»…æ˜¯é‡Šæ”¾ç©ºé—´ï¼Œæ›´æ˜¯ä¸Žå›žå¿†çš„ä¸€æ¬¡æ¬¡é‡é€¢ã€‚â€*
 
 ---
 
-## :star2: ºËÐÄÌØÐÔ (Features)
+## :star2: æ ¸å¿ƒç‰¹æ€§ (Features)
 
-* **:beginner: ìøÒâÄ£Ê½**£º¾Ü¾ø½¹ÂÇ£¬Ã¿´ÎÖ»ÍÆËÍ 15 ÕÅÕÕÆ¬£¬ËéÆ¬Ê±¼ä¼´¿ÉÍê³ÉÕûÀí¡£
-* **:point_up: ÊÖÊÆ²Ù×÷**£º½è¼ø¿¨Æ¬Ê½½»»¥£¬×ó»¬/ÓÒ»¬/ÉÏ»¬£¬µ¥ÊÖ¼´¿ÉÇáËÉ²Ù×÷¡£
-* **:shield: ÒþË½ÓÅÏÈ**£º**½ö±¾µØ´¦Àí (Local Only)**¡£Tabula ²»ÐèÒªÁªÍøÈ¨ÏÞ£¬ÄúµÄÕÕÆ¬¾ø²»»áÉÏ´«µ½ÈÎºÎ·þÎñÆ÷¡£
-* **:moon: ÉîÉ«Ä£Ê½**£ºÍêÃÀÊÊÅä Android ÉîÉ«Ö÷Ìâ£¬Ò¹¼äÕûÀí¸ü»¤ÑÛ¡£
-* **:wastebasket: ºó»ÚÒ©»úÖÆ**£ºËùÓÐÉ¾³ý²Ù×÷½øÈë¡°»ØÊÕÕ¾¡±£¬¸øÄú¶þ´ÎÈ·ÈÏµÄ»ú»á¡£
-
----
-
-## :lock: ÒþË½³ÐÅµ (Privacy Policy)
-
-ÎÒÃÇÉîÖªÕÕÆ¬ÊÇÄú×îË½ÃÜµÄÊý¾Ý¡£
-**Tabula ³ÐÅµ£º**
-1. :no_entry_sign: ²»ÉêÇë»¥ÁªÍøÈ¨ÏÞ¡£
-2. :eye_off: ²»ÊÕ¼¯ÈÎºÎÓÃ»§ÐÐÎªÊý¾Ý¡£
-3. :mobile_phone_off: ËùÓÐÍ¼Æ¬´¦Àí£¨·ÖÎö¡¢É¾³ý£©¾ùÔÚÄúµÄÊÖ»ú±¾µØÍê³É¡£
+* **:beginner: ç¦…æ„æ¨¡å¼**ï¼šæ‹’ç»ç„¦è™‘ï¼Œæ¯æ¬¡åªæŽ¨é€ 15 å¼ ç…§ç‰‡ï¼Œç¢Žç‰‡æ—¶é—´å³å¯å®Œæˆæ•´ç†ã€‚
+* **:point_up: æ‰‹åŠ¿æ“ä½œ**ï¼šå€Ÿé‰´å¡ç‰‡å¼äº¤äº’ï¼Œå·¦æ»‘/å³æ»‘/ä¸Šæ»‘ï¼Œå•æ‰‹å³å¯è½»æ¾æ“ä½œã€‚
+* **:shield: éšç§ä¼˜å…ˆ**ï¼š**ä»…æœ¬åœ°å¤„ç† (Local Only)**ã€‚Tabula ä¸éœ€è¦è”ç½‘æƒé™ï¼Œæ‚¨çš„ç…§ç‰‡ç»ä¸ä¼šä¸Šä¼ åˆ°ä»»ä½•æœåŠ¡å™¨ã€‚
+* **:moon: æ·±è‰²æ¨¡å¼**ï¼šå®Œç¾Žé€‚é… Android æ·±è‰²ä¸»é¢˜ï¼Œå¤œé—´æ•´ç†æ›´æŠ¤çœ¼ã€‚
+* **:wastebasket: åŽæ‚”è¯æœºåˆ¶**ï¼šæ‰€æœ‰åˆ é™¤æ“ä½œè¿›å…¥â€œå›žæ”¶ç«™â€ï¼Œç»™æ‚¨äºŒæ¬¡ç¡®è®¤çš„æœºä¼šã€‚
 
 ---
 
-## :speech_balloon: ·´À¡Óë½¨Òé (Feedback)
+## :lock: éšç§æ‰¿è¯º (Privacy Policy)
 
-Èç¹ûÄúÔÚÊ¹ÓÃ¹ý³ÌÖÐÓöµ½ Bug£¬»òÓÐÐÂµÄ¹¦ÄÜ½¨Òé£¬»¶Ó­Í¨¹ýÒÔÏÂ·½Ê½ÁªÏµ£º
+æˆ‘ä»¬æ·±çŸ¥ç…§ç‰‡æ˜¯æ‚¨æœ€ç§å¯†çš„æ•°æ®ã€‚
+**Tabula æ‰¿è¯ºï¼š**
+1. :no_entry_sign: ä¸ç”³è¯·äº’è”ç½‘æƒé™ã€‚
+2. :eye_off: ä¸æ”¶é›†ä»»ä½•ç”¨æˆ·è¡Œä¸ºæ•°æ®ã€‚
+3. :mobile_phone_off: æ‰€æœ‰å›¾ç‰‡å¤„ç†ï¼ˆåˆ†æžã€åˆ é™¤ï¼‰å‡åœ¨æ‚¨çš„æ‰‹æœºæœ¬åœ°å®Œæˆã€‚
 
-* Ìá½» [Issues](https://github.com/Doryoku1223/Tabula/issues)
+---
+
+## :speech_balloon: åé¦ˆä¸Žå»ºè®® (Feedback)
+
+å¦‚æžœæ‚¨åœ¨ä½¿ç”¨è¿‡ç¨‹ä¸­é‡åˆ° Bugï¼Œæˆ–æœ‰æ–°çš„åŠŸèƒ½å»ºè®®ï¼Œæ¬¢è¿Žé€šè¿‡ä»¥ä¸‹æ–¹å¼è”ç³»ï¼š
+
+* æäº¤ [Issues](https://github.com/Doryoku1223/Tabula/issues)
 
 ---
 
